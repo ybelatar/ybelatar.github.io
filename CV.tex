@@ -1,0 +1,209 @@
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\input{glyphtounicode}
+
+
+%----------FONT OPTIONS----------
+% sans-serif
+% \usepackage[sfdefault]{FiraSans}
+% \usepackage[sfdefault]{roboto}
+% \usepackage[sfdefault]{noto-sans}
+% \usepackage[default]{sourcesanspro}
+
+% serif
+% \usepackage{CormorantGaramond}
+% \usepackage{charter}
+
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Ensure that generate pdf is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+
+\begin{center}
+    \textbf{\Huge \scshape Younes Belataris} \\ \vspace{6pt}
+    \small Paris, France  \hspace{2mm}•\hspace{2mm}   +33695389965   \hspace{2mm}•\hspace{2mm}   \href{younes.belataris77@gmail.com}{{younes.belataris77@gmail.com}} \\
+    \href{https://linkedin.com/in/younes-belataris}{{linkedin.com/in/younes-belataris}} \hspace{2mm}•\hspace{2mm}
+    \href{https://github.com/ybelatar}{{github.com/ybelatar}}
+\end{center}
+
+
+%-----------EDUCATION-----------
+\section{Education}
+    \vspace{3pt}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {42 Paris}{}
+      {Master in Computer Science}{Paris, France}
+    \resumeSubheading
+      {ESCP}{}
+      {Option E(ntreprenariat)}{Paris, France}
+  \resumeSubHeadingListEnd
+
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {FullStack Developer - AI Automation Engineer}{Jan 2025 -- Present}
+      {\href{https://appchoose.io}{Choose}}{Paris, France}
+      \resumeItemListStart
+        \resumeItem{Developed an AI-powered crawler/scraper to retrieve product data from an ecommerce website using \textbf{FastAPI}, \textbf{LangChain} and \textbf{Google-ADK}, saving over \textbf{2000 hours of workforce} a year}
+        \resumeItem{Contributed to a fullstack internal tool, built with \textbf{NextJS}, \textbf{Fastify} and \textbf{GraphQL}, streamlining the sales and merchandising processes, saving \textbf{1500 days of workforce} a year }
+        \resumeItem{Implemented entire workflow automations for the merchandising and sales teams using intelligent systems}
+      \resumeItemListEnd
+      
+
+  \resumeSubHeadingListEnd
+
+%
+%-----------PROGRAMMING SKILLS-----------
+\section{Technical Skills}
+ \vspace{4pt}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Languages}{: C/C++, Python, JavaScript/TypeScript, SQL (PostGre), Bash, Go} \\ \vspace{2pt} 
+     \textbf{Frameworks}{: React, Next.js, Node.js (Express / Fastify), Django, LangGraph, GraphQL} \\ \vspace{2pt}
+     \textbf{Developer Tools}{: Git, Docker, Redis, PostMan, GitHub (Actions), LangFuse, GCP} \\ \vspace{2pt}
+     \textbf{AI Tools}{: Cursor, Claude Code, n8n, Clay}
+    }}
+ \end{itemize}
+
+%-------------------------------------------
+
+%-----------PROJECTS-----------
+\section{Personal Projects}
+    \vspace{2pt}
+    \resumeSubHeadingListStart
+        \resumeProjectHeading
+          {\textbf{Transcendence} $|$ \emph{JavaScript, Python, Django, PostgreSQL, Docker, Redis}}{}
+          \resumeItemListStart
+            \resumeItem{Developed a full-stack Single-Page-Application (\textbf{SPA}) to play pong online featuring tournaments or ranked games}
+            \resumeItem{The app is built with \textbf{JavaScript} and \textbf{Bootstrap} for the client and \textbf{Django} (Python) for the server}
+            \resumeItem{Implemented database with \textbf{PostGre} using Django's ORM , robust \textbf{REST API} and \textbf{JWT} user authentication}
+            \resumeItem{Used \textbf{Redis} for caching and \textbf{Docker} for deployment as micro-services for further scalability}
+          \resumeItemListEnd
+        \resumeProjectHeading
+          {\textbf{Pisco} $|$ \emph{Python / Google-ADK}}{}
+          \resumeItemListStart
+            \resumeItem{Created a Discord \textbf{AI agent} meant to provide an enhanced experience for the user, }
+            \resumeItem{The agent is capable of reading past messages to use them as context and is also able to research for data on the internet using a web search \textbf{MCP server}}
+            \resumeItem{It is powered using \textbf{Gemini 2.5 Flash} model, allowing it to be fast and reliable (although any model can be plugged to it via LiteLLM)}
+          \resumeItemListEnd
+        \resumeProjectHeading
+          {\textbf{Inception} $|$ \emph{Docker}}{}
+          \resumeItemListStart
+            \resumeItem{Successfully set up and managed a \textbf{WordPress} server using \textbf{Docker} containers to set up \textbf{NGINX} as a web server and \textbf{MariaDB} as the database}
+            \resumeItem{Implemented \textbf{Redis} caching to upgrade the speed and performance of the WordPress website}
+            \resumeItem{Used \textbf{Docker Compose} for optimized deployment, reducing setup time and simplifying maintenance}
+            \resumeItem{Also added as bonuses, a \textbf{FTP} server, a static portfolio using \textbf{HTTP/CSS} and Minecraft server all using Docker containers}
+          \resumeItemListEnd
+        \resumeProjectHeading
+          {\textbf{Ft-IRC} $|$ \emph{C++}}{}
+          \resumeItemListStart
+            \resumeItem{Built an \textbf{IRC} server that accommodates to IRC client IRSSI}
+            \resumeItem{Usage of Object Oriented Programming (\textbf{OOP}) to set the structure of the project (clients, channels, moderators)}
+            \resumeItem{Project relying heavily on documentation analysis to extract the correct response codes and formats}
+            \resumeItem{Implemented direct connection between users for file transfer or private messaging, enhancing the users experience}
+          \resumeItemListEnd
+    \resumeSubHeadingListEnd
+
+
+%---------RANDOM EXPERIENCE-------------
+
+% \section{Non-Technical Experience}
+%     \vspace{2pt}
+%     \resumeSubHeadingListStart
+%         \resumeProjectHeading
+%             {\textbf{Restaurant Manager} $|$ \emph{Carl's Jr}}{Jan 2022 -- Jan 2023}
+%             \resumeItemListStart
+%                 \resumeItem{Led a team of 10+ staff members, efficiently managing schedules and delegating tasks to ensure all operations}
+%                 \resumeItem{Used data analytics to set goals for the day such as increasing profit or reducing food waste}
+%                 \resumeItem{Showcased problem-solving and crisis management in the toughest positions in order to better the customer's satisfaction}
+%                 \resumeItem{Managed inventory and deliveries in order to optimize product usage and waste}
+%             \resumeItemListEnd
+%     \resumeSubHeadingListEnd
+
+
+\end{document}

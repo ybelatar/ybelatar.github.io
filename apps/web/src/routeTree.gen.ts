@@ -9,38 +9,81 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ThoughtsRouteImport } from './routes/thoughts'
+import { Route as ResumeRouteImport } from './routes/resume'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ThoughtsPostIdRouteImport } from './routes/thoughts.$postId'
 
+const ThoughtsRoute = ThoughtsRouteImport.update({
+  id: '/thoughts',
+  path: '/thoughts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResumeRoute = ResumeRouteImport.update({
+  id: '/resume',
+  path: '/resume',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ThoughtsPostIdRoute = ThoughtsPostIdRouteImport.update({
+  id: '/$postId',
+  path: '/$postId',
+  getParentRoute: () => ThoughtsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/resume': typeof ResumeRoute
+  '/thoughts': typeof ThoughtsRouteWithChildren
+  '/thoughts/$postId': typeof ThoughtsPostIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/resume': typeof ResumeRoute
+  '/thoughts': typeof ThoughtsRouteWithChildren
+  '/thoughts/$postId': typeof ThoughtsPostIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/resume': typeof ResumeRoute
+  '/thoughts': typeof ThoughtsRouteWithChildren
+  '/thoughts/$postId': typeof ThoughtsPostIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/resume' | '/thoughts' | '/thoughts/$postId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/resume' | '/thoughts' | '/thoughts/$postId'
+  id: '__root__' | '/' | '/resume' | '/thoughts' | '/thoughts/$postId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ResumeRoute: typeof ResumeRoute
+  ThoughtsRoute: typeof ThoughtsRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/thoughts': {
+      id: '/thoughts'
+      path: '/thoughts'
+      fullPath: '/thoughts'
+      preLoaderRoute: typeof ThoughtsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resume': {
+      id: '/resume'
+      path: '/resume'
+      fullPath: '/resume'
+      preLoaderRoute: typeof ResumeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +91,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/thoughts/$postId': {
+      id: '/thoughts/$postId'
+      path: '/$postId'
+      fullPath: '/thoughts/$postId'
+      preLoaderRoute: typeof ThoughtsPostIdRouteImport
+      parentRoute: typeof ThoughtsRoute
+    }
   }
 }
 
+interface ThoughtsRouteChildren {
+  ThoughtsPostIdRoute: typeof ThoughtsPostIdRoute
+}
+
+const ThoughtsRouteChildren: ThoughtsRouteChildren = {
+  ThoughtsPostIdRoute: ThoughtsPostIdRoute,
+}
+
+const ThoughtsRouteWithChildren = ThoughtsRoute._addFileChildren(
+  ThoughtsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ResumeRoute: ResumeRoute,
+  ThoughtsRoute: ThoughtsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
