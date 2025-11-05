@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useMatchRoute } from "@tanstack/react-router";
 import { thoughts } from "@/data/thoughts";
 
 export const Route = createFileRoute("/thoughts")({
@@ -17,6 +17,15 @@ export const Route = createFileRoute("/thoughts")({
 });
 
 function ThoughtsComponent() {
+  const matchRoute = useMatchRoute();
+  const isDetailPage = matchRoute({ to: "/thoughts/$postId" });
+
+  // If we're on a detail page, only render the outlet (child route)
+  if (isDetailPage) {
+    return <Outlet />;
+  }
+
+  // Otherwise, render the list
   return (
     <div className="max-w-5xl pl-8 md:pl-0 md:ml-[16.67%] pr-8 md:pr-16 py-20">
       <h1 className="text-4xl font-bold mb-12 lowercase">thoughts</h1>
