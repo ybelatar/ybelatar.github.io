@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Linkedin, Github, Mail, Twitter } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: HomeComponent,
@@ -32,11 +33,15 @@ function HomeComponent() {
         </h1>
 
         <p className="text-base mb-4 leading-relaxed">
-          i build{" "}
+          i help{" "}
+          <span className="highlight font-medium">identify bottlenecks</span>{" "}
+          and build{" "}
           <span className="highlight font-medium">
-            automation tools & intelligent systems
+            automations & intelligent systems
           </span>{" "}
-          for companies. currently at{" "}
+          for companies.
+          <br />
+          currently at{" "}
           <a
             href="https://appchoose.io"
             target="_blank"
@@ -50,7 +55,7 @@ function HomeComponent() {
 
         <p className="text-base mb-8 leading-relaxed">
           basically, i'm a fullstack developer who loves building things that
-          save people time and makes companies money.
+          save people time and make companies money.
         </p>
 
         <p className="text-base mb-2 lowercase">
@@ -103,13 +108,13 @@ function HomeComponent() {
           <h3 className="text-sm font-medium mb-2 lowercase">choose</h3>
           <ul className="space-y-3 text-base">
             <li className="leading-relaxed">
-              • built ai-powered crawler using FastAPI, LangChain & Google-ADK,
-              saving <span className="font-medium">2000 hours/year</span>
+              • built ai-powered crawler/scraper to retrieve products from
+              ecommerce websites, saving{" "}
+              <span className="font-medium">2000 hours/year</span>
             </li>
             <li className="leading-relaxed">
-              • developed internal tool (NextJS, Fastify, GraphQL) streamlining
-              sales & merchandising, saving{" "}
-              <span className="font-medium">1500 days/year</span>
+              • developed internal tool streamlining sales & merchandising,
+              saving <span className="font-medium">1500 days/year</span>
             </li>
           </ul>
         </div>
@@ -119,8 +124,7 @@ function HomeComponent() {
           <h3 className="text-sm font-medium mb-2 lowercase">personal</h3>
           <ul className="space-y-3 text-base">
             <li className="leading-relaxed">
-              • created pisco, a personal AI assistant on discord (Gemini 2.5
-              Flash, MCP server)
+              • created pisco, a personal AI assistant on discord
             </li>
           </ul>
         </div>
