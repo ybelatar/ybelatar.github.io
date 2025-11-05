@@ -6,75 +6,142 @@ export interface Thought {
   content: string;
 }
 
-// Parse frontmatter from markdown content
-function parseMarkdown(content: string, filename: string): Thought {
-  const id = filename.replace(/\.md$/, "");
+type Frontmatter = Record<string, string>;
 
-  // Try to parse frontmatter (format: ---\nkey: value\n---\ncontent)
-  const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/;
-  const match = content.match(frontmatterRegex);
-
-  let metadata: Record<string, string> = {};
-  let markdownContent = content;
-
-  if (match) {
-    // Parse frontmatter
-    const frontmatter = match[1];
-    markdownContent = match[2];
-
-    frontmatter.split("\n").forEach((line) => {
-      const colonIndex = line.indexOf(":");
-      if (colonIndex > 0) {
-        const key = line.substring(0, colonIndex).trim();
-        const value = line
-          .substring(colonIndex + 1)
-          .trim()
-          .replace(/^["']|["']$/g, "");
-        metadata[key] = value;
-      }
-    });
-  }
-
-  // Extract excerpt from first paragraph if not in frontmatter
-  const paragraphs = markdownContent.split("\n\n").filter((p) => p.trim());
-  const excerpt =
-    metadata.excerpt || paragraphs[0]?.trim().substring(0, 150) || "";
-
-  // Generate title from filename if not in frontmatter
-  const title =
-    metadata.title ||
-    id
-      .split("-")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-
-  // Use date from frontmatter or default
-  const date = metadata.date || "recent";
-
-  return {
-    id,
-    title: title.toLowerCase(),
-    date,
-    excerpt: excerpt.length > 150 ? excerpt.substring(0, 150) + "..." : excerpt,
-    content: markdownContent.trim(),
-  };
+interface ParsedMarkdown {
+  frontmatter: Frontmatter;
+  body: string;
 }
 
-// Load all markdown files from the thoughts folder
-// Vite glob patterns are relative to project root (apps/web)
-const thoughtsModules = import.meta.glob("../thoughts/*.md?raw", {
+interface ThoughtRecord {
+  thought: Thought;
+  order: number;
+  timestamp: number;
+}
+
+const RAW_THOUGHT_MODULES = import.meta.glob("../thoughts/**/*.md", {
+  as: "raw",
   eager: true,
 }) as Record<string, string>;
 
-// Convert to array of thoughts
-export const thoughts: Thought[] = Object.entries(thoughtsModules)
-  .map(([path, content]) => {
-    // Extract filename from path (remove query params and path)
-    const fullPath = path.split("/").pop() || "";
-    const filename = fullPath.split("?")[0];
-    return parseMarkdown(content, filename);
-  })
-  .sort((a, b) => {
-    // Sort by date (most recent first) - simple string comparison for now
-    return b.date.localeCompare(a.date);
+const FRONTMATTER_REGEX = /^---\s*\n([\s\S]+?)\n---\s*\n?/;
+
+function parseFrontmatter(markdown: string): ParsedMarkdown {
+  const match = markdown.match(FRONTMATTER_REGEX);
+
+  if (!match) {
+    return {
+      frontmatter: {},
+      body: markdown.trim(),
+    };
+  }
+
+  const [, frontmatterBlock] = match;
+  const body = markdown.slice(match[0].length).trim();
+
+  const frontmatter: Frontmatter = {};
+  frontmatterBlock.split("\n").forEach((line) => {
+    const separatorIndex = line.indexOf(":");
+    if (separatorIndex === -1) return;
+
+    const key = line.slice(0, separatorIndex).trim();
+    if (!key) return;
+
+    const value = line
+      .slice(separatorIndex + 1)
+      .trim()
+      .replace(/^['"]|['"]$/g, "");
+
+    frontmatter[key] = value;
   });
+
+  return { frontmatter, body };
+}
+
+function slugFromPath(path: string): string {
+  const normalized = path.replace(/\\/g, "/");
+  const withoutExtension = normalized.replace(/\.md$/, "");
+  const [, slug = withoutExtension] = withoutExtension.split("/thoughts/");
+  return slug;
+}
+
+function titleFromSlug(slug: string): string {
+  const segment = slug.split("/").pop() ?? slug;
+  return segment
+    .split("-")
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
+function toExcerpt(source: string): string {
+  const cleaned = source.replace(/\s+/g, " ").trim();
+  if (cleaned.length <= 200) {
+    return cleaned;
+  }
+  return `${cleaned.slice(0, 197).trim()}...`;
+}
+
+function toOrder(value?: string): number {
+  if (!value) return Number.POSITIVE_INFINITY;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : Number.POSITIVE_INFINITY;
+}
+
+function toTimestamp(value: string): number {
+  const parsed = Date.parse(value);
+  return Number.isNaN(parsed) ? 0 : parsed;
+}
+
+function buildThoughtRecord(
+  path: string,
+  rawMarkdown: string
+): ThoughtRecord | null {
+  const slug = slugFromPath(path);
+  const { frontmatter, body } = parseFrontmatter(rawMarkdown);
+
+  if (frontmatter.draft?.toLowerCase() === "true") {
+    return null;
+  }
+
+  const title = frontmatter.title || titleFromSlug(slug);
+  const date = frontmatter.date || "recent";
+
+  const paragraphs = body.split(/\n\s*\n/).map((paragraph) => paragraph.trim());
+  const firstParagraph = paragraphs.find(Boolean) ?? "";
+  const excerptSource = frontmatter.excerpt || firstParagraph;
+
+  const thought: Thought = {
+    id: slug,
+    title,
+    date,
+    excerpt: toExcerpt(excerptSource),
+    content: body,
+  };
+
+  return {
+    thought,
+    order: toOrder(frontmatter.order || frontmatter.priority),
+    timestamp: toTimestamp(date),
+  };
+}
+
+const thoughtRecords = Object.entries(RAW_THOUGHT_MODULES)
+  .map(([path, raw]) => buildThoughtRecord(path, raw))
+  .filter((record): record is ThoughtRecord => Boolean(record))
+  .sort((a, b) => {
+    if (a.order !== b.order) {
+      return a.order - b.order;
+    }
+    return b.timestamp - a.timestamp;
+  });
+
+export const thoughts: Thought[] = thoughtRecords.map(
+  (record) => record.thought
+);
+
+const thoughtsById = new Map(thoughts.map((thought) => [thought.id, thought]));
+
+export function getThoughtById(id: string): Thought | undefined {
+  return thoughtsById.get(id);
+}
